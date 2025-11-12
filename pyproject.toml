@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools >= 77.0.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sheessh"
+version = "0.0.1"
+authors = [
+  { name="David Rejchrt", email="david.rejchrt@leica-geosystems.com" },
+]
+description = "A small package of functions that manipulate files and directories on remote systems using ssh"
+requires-python = ">=3.13"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "bcrypt==5.0.0",
+    "cffi==2.0.0",
+    "cryptography==46.0.3",
+    "decorator==5.2.1",
+    "Deprecated==1.3.1",
+    "fabric==3.2.2",
+    "invoke==2.2.1",
+    "paramiko==4.0.0",
+    "pycparser==2.23",
+    "PyNaCl==1.6.0",
+    "wrapt==2.0.0",
+]

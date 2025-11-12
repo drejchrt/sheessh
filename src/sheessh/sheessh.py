@@ -55,7 +55,7 @@ def test_connection(host):
         return True
     except FileNotFoundError as e:
         print(
-            f"SSH connection failed. Private key file not found {host.indetity}")
+            f"SSH connection failed. Private key file not found {host.identity}")
         return False
     except TimeoutError as e:
         print(f"SSH connection timed out. {e}")
@@ -99,8 +99,11 @@ def remote_mkdir(host, path, hide=True):
 
 
 def remote_is_dir(host, path, hide=True):
-    test = host.run(f"test -d {path} && echo 0 || echo 1", hide=hide).stdout
-    return test.strip() == "0"
+    if remote_path_exists(host, path):
+        test = host.run(f"test -d {path} && echo 0 || echo 1", hide=hide).stdout
+        return test.strip() == "0"
+    else:
+        raise FileNotFoundError(f"Error. Dir {host.hostname}:{path} does not exist")
 
 
 def remote_file_info(host, path, hide=True):
@@ -127,20 +130,19 @@ def remote_file_info(host, path, hide=True):
 def remote_dir_info(host, path, hide=True):
     try:
         dir_size = host.run(f"du -sb {path}", hide=hide).stdout.split("\t")[0]
+        lm_ts = host.run(f'stat -c "%Y" "{path}"', hide=hide).stdout
+        last_modified= datetime.fromtimestamp(int(lm_ts))
     except UnexpectedExit as e:
         print(f"Error getting remote dir info. "
               f"Directory {host.hostname}:{path} does not exist",
               file=sys.stderr)
         # print(e)
-        return None
-
-    info = remote_file_info(host, path)
-
     return {
         "path": path,
         "size_bytes": int(dir_size),
-        "last_modified": info["last_modified"]
+        "last_modified": last_modified
     }
+
 
 
 def remote_file_exists(host, path, hide=True):
@@ -154,9 +156,12 @@ def remote_dir_exists(host, path, hide=True):
                    hide=hide).stdout.strip()
     return tst == "0"
 
+def remote_path_exists(host, path, hide=True):
+    tst = host.run(f"test -e {path} && echo 0 || echo 1", hide=hide).stdout.strip()
+    return tst == "0"
 
 def rename_remote_file(host, file, new_name, hide=True):
-    if remote_file_exists(host, file, hide=hide):
+    if remote_path_exists(host, file, hide=hide):
         dirname = os.path.dirname(file)
         new_path = f"{dirname}/{new_name}"
         host.run(f"mv {file} {new_path}", hide=hide)
@@ -166,7 +171,7 @@ def rename_remote_file(host, file, new_name, hide=True):
 
 
 def rename_remote_dir(host, rdir, new_name, hide=True):
-    if remote_dir_exists(host,rdir,hide=hide):
+    if remote_path_exists(host,rdir,hide=hide):
         new_path = rdir.split('/')[:-2] + [new_name]
         new_path = "/".join(new_path)
         host.run(f"mv {rdir} {new_path}",hide=True)
@@ -282,6 +287,14 @@ def truncate_remote_file(host, path):
               f"File {host.hostname}:{path} does not exist",
               file=sys.stderr)
 
+
+def delete_remote_dir_content(host, path):
+    try:
+        host.run(f"rm -rf {path}/*")
+    except UnexpectedExit as e:
+        print(f"Error deleting remote directory content."
+              f"Directory {host.hostname}:{path} does not exist",
+              file=sys.stderr)
 
 
 def upload_file(host, file, rem_dest):

@@ -1,16 +1,17 @@
-from sheessh import *
+from src.sheessh.sheessh import *
 
 ID_075 = r"C:\Users\REJD\.ssh\id_rsa_075"
 ID_087 = r"C:\Users\REJD\.ssh\id_rsa_087"
 
 host = Host(
     # hostname="TS20-4790010",
-    hostname="TS20-3795167",
+    # hostname="TS20-3795167",
     # hostname="TS20-4790005",
+    hostname="TS20-4790007",
     identity=ID_075
 )
 
-# print(test_connection(host))
+print(test_connection(host))
 
 # result = ssh(host,"ps afx")
 
@@ -78,4 +79,4 @@ host = Host(
 
 #print(zip_remote_dir(host, "/mnt/data/rejd/tst"))
 
-#zip_and_download(host,"/mnt/data/rejd/tst")
+# zip_and_download(host,"/mnt/data/rejd/tst")
