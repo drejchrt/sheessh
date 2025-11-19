@@ -1,14 +1,16 @@
 from src.sheessh.sheessh import *
 
 ID_075 = r"C:\Users\REJD\.ssh\id_rsa_075"
+ID_086 = r"C:\Users\REJD\.ssh\id_rsa_086"
 ID_087 = r"C:\Users\REJD\.ssh\id_rsa_087"
 
 host = Host(
     # hostname="TS20-4790010",
     # hostname="TS20-3795167",
     # hostname="TS20-4790005",
-    hostname="TS20-4790007",
-    identity=ID_075
+    # hostname="TS20-4790007",
+    hostname="TS20-4790086",
+    identity=ID_086
 )
 
 print(test_connection(host))
@@ -80,3 +82,6 @@ print(test_connection(host))
 #print(zip_remote_dir(host, "/mnt/data/rejd/tst"))
 
 # zip_and_download(host,"/mnt/data/rejd/tst")
+
+# print(read_remote_json(host,"/mnt/data/log_config.json"))
+# print(read_remote_json(host,"/mnt/data/log_config.disabled"))

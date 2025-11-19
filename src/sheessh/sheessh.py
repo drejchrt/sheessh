@@ -1,5 +1,6 @@
 import os
 import sys
+import json
 from datetime import datetime
 
 from fabric import Connection
@@ -319,3 +320,21 @@ def zip_and_download(host, remote_dir, dest=None):
         dest = os.getcwd()
     archive = zip_remote_dir(host, remote_dir)
     download_file(host,archive,dest)
+
+
+def read_remote_json(host, remote_path):
+    """
+    Reads a remote JSON file and returns its content as a Python dictionary.
+
+    :param remote_path: The full path to the remote JSON file.
+    :return: A Python dictionary containing the JSON data.
+    """
+    if remote_file_exists(host, remote_path):
+        # Open the remote file via SFTP
+        with host.conn.sftp().open(remote_path, 'r') as remote_file:
+            data = remote_file.read().decode('utf-8')  # Read and decode file content
+
+        # Parse JSON into Python dictionary
+        return json.loads(data)
+    else:
+        raise FileNotFoundError(f"Error reading remote file. \nFile {host.hostname}:{remote_path} does not exist")
