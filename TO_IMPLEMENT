@@ -3,3 +3,6 @@
 * file exists / not exists check on all functions
 
 * try and implement usage of pathlib
+
+* add automatic tests
+
