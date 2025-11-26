@@ -1,4 +1,14 @@
+from pathlib import Path
+
 from src.sheessh.sheessh import *
+
+def ignore(ex, call, *args, **kwargs):
+    try:
+        print(call(*args,**kwargs))
+    except ex as e:
+        print(f"Error [{type(e)}]: {e}")
+
+
 
 ID_075 = r"C:\Users\REJD\.ssh\id_rsa_075"
 ID_086 = r"C:\Users\REJD\.ssh\id_rsa_086"
@@ -15,73 +25,110 @@ host = Host(
 
 print(test_connection(host))
 
-# result = ssh(host,"ps afx")
 
+# result = ssh(host,"psa afx", hide=True)
+################ test local touch #############################################
+# touch("test.txt")
+# touch(r"some_bs_dir\\test.txt")
+
+################ test remote touch  ###########################################
 # touch_remote(host, "/mnt/data/rejd/tbyp.proof")
+# touch_remote(host, "/mnt/data/rejd/tst/tbyp.proof")
 
+################ test remote_mkdir ############################################
+# print(remote_mkdir(host, "/mnt/data/rejd/tst0/"))
+# print(remote_mkdir(host, "/mnt/data/rejd/tst/tst1"))
+# print(remote_mkdir(host, "/mnt/data/rejd/tst2/tst3/tst4"))
+# print(remote_mkdir(host, "/mnt/data/rejd/tst5/tst3/tst4/"))
+
+################ test remote_is_dir ###########################################
 # print(remote_is_dir(host, "/mnt/data/rejd"))
 # print(remote_is_dir(host, "/mnt/data/rejd/"))
 # print(remote_is_dir(host, "/mnt/data/rejd/.bashrc-20"))
+# print(remote_is_dir(host, "/mnt/data/rejd/.bashrc-ts20"))
 
-# print(remote_file_info(host, "/mnt/data/rejd/.bashrc-ts20"))
-# print(remote_file_info(host, "/mnt/data/rejd/"))
-# print(remote_file_info(host, "/mnt/data/rejd/.bashrc-20"))
+################ test remote_file_info #########################################
+# ignore(FileNotFoundError, remote_file_info, host,"/mnt/data/rejd/.bashrc-ts20")
+# ignore(FileNotFoundError, remote_file_info, host, "/mnt/data/rejd/")
+# ignore(FileNotFoundError, remote_file_info, host, "/mnt/data/rejd/.bashrc-20")
 
-# print(remote_dir_info(host,"/mnt/data/rejd/"))
-# print(remote_dir_info(host,"/mnt/data/rejd"))
-# print(remote_dir_info(host,"/mnt/data/rejd/.bashrc-ts20"))
-# print(remote_dir_info(host,"/mnt/data/rejd/.bashrc-20"))
-#
+################ test remote_dir_info #########################################
+# ignore(FileNotFoundError, remote_dir_info,host,"/mnt/data/rejd/")
+# ignore(FileNotFoundError, remote_dir_info,host,"/mnt/data/rejd")
+# ignore(FileNotFoundError, remote_dir_info,host,"/mnt/data/rejd/.bashrc-ts20")
+# ignore(FileNotFoundError, remote_dir_info,host,"/mnt/data/rejd/.bashrc-20")
 
-# print(remote_file_exists(host,"/mnt/data/rejd/"))
-# print(remote_file_exists(host,"/mnt/data/rejd"))
-# print(remote_file_exists(host,"/mnt/data/rejd/bass"))
-# print(remote_file_exists(host,"/mnt/data/rejd/.bashrc-ts20"))
 
-# print(remote_dir_exists(host,"/mnt/data/rejd/"))
-# print(remote_dir_exists(host,"/mnt/data/rejd"))
-# print(remote_dir_exists(host,"/mnt/data/rejd/bass"))
-# print(remote_dir_exists(host,"/mnt/data/rejd/.bashrc-ts20"))
+################ test remote_path_info #########################################
+# ignore(FileNotFoundError, remote_path_info, host,"/mnt/data/rejd/.bashrc-ts20")
+# ignore(FileNotFoundError, remote_path_info, host, "/mnt/data/rejd/")
+# ignore(FileNotFoundError, remote_path_info, host, "/mnt/data/rejd/.bashrc-20")
+# ignore(FileNotFoundError, remote_path_info,host,"/mnt/data/rejd/")
+# ignore(FileNotFoundError, remote_path_info,host,"/mnt/data/rejd")
+# ignore(FileNotFoundError, remote_path_info,host,"/mnt/data/rejd/.bashrc-ts20")
+# ignore(FileNotFoundError, remote_path_info,host,"/mnt/data/rejd/.bashrc-20")
 
-# touch_remote(host,"/mnt/data/rejd/tst/foo.bar")
-# print(remote_file_exists(host,"/mnt/data/rejd/tst/foo.bar"))
-# rename_remote_file(host,"/mnt/data/rejd/tst/foo.bar", "baz.bag")
-# print(remote_file_exists(host,"/mnt/data/rejd/tst/foo.bar"))
-# print(remote_file_exists(host,"/mnt/data/rejd/tst/baz.bag"))
+################# test rename_remote_file #####################################
 
-# touch_remote(host,"/mnt/data/rejd/tst/foo.bar")
-# print(remote_dir_exists(host,"/mnt/data/rejd/tst/"))
-# rename_remote_dir(host,"/mnt/data/rejd/tst/","teeeeest")
-# print(remote_dir_exists(host,"/mnt/data/rejd/tst/"))
-# print(remote_dir_exists(host,"/mnt/data/rejd/teeeeest/"))
+# touch_remote(host,"/mnt/data/rejd/tst/test1.txt")
+# touch_remote(host,"/mnt/data/rejd/tst/test2.txt")
+# rename_remote_file(host,"/mnt/data/rejd/tst/test3.txt", "rst.txt")
+# rename_remote_file(host,"/mnt/data/rejd/tst/test1.txt", "test2.txt")
 
-# touch_remote(host, "/mnt/data/rejd/tst/foo.bar")
-# move_remote_file(host, "/mnt/data/rejd/tst/foo.bar", "/tmp/data/rejd/test/" )
-# touch_remote(host, "/mnt/data/rejd/tst/foo.bar")
-# move_remote_file(host, "/mnt/data/rejd/tst/foo.bar", "/tmp/data/rejd/tst/baz.bar" )
+################ test rename_remote_dir #######################################
+#rename_remote_dir(host,"/mnt/data/rejd/tst5","tst55")
+#rename_remote_dir(host,"/mnt/data/rejd/tst","tst2")
+#rename_remote_dir(host,"/mnt/data/rejd/tst2/","tst1")
 
-# touch_remote(host,"/mnt/data/rejd/tst/foo.bar")
-# move_remote_dir(host, "/mnt/data/rejd/tst/","/tmp/data")
-# move_remote_dir(host, "/mnt/data/rejd/tst/","/tmp/data/rejd")
+################ test move_remote_file #########################################
+# touch_remote(host,"/mnt/data/rejd/test/blahb.cle")
+# move_remote_file(host,"/mnt/data/rejd/test/blahb","/mnt/data/rejd/testt/" )
+# move_remote_file(host,"/mnt/data/rejd/test/blahb.cle","/mnt/data/rejd/testt" )
+# move_remote_file(host,"/mnt/data/rejd/test/blahb.cle","/mnt/data/rejd/testt/" )
+# move_remote_file(host,"/mnt/data/rejd/test/blahb.cle","/mnt/data/rejd/testt/tst" )
+# move_remote_file(host,"/mnt/data/rejd/test/blahb.cle","/mnt/data/rejd/testt/tst/" )
+# move_remote_file(host,"/mnt/data/rejd/test/blahb.cle","/mnt/data/rejd/testt/tst.txt" )
 
-# dest_dir = os.path.join(os.getcwd(), ".tst")
-# os.makedirs(dest_dir)
-# dest_file = os.path.join(dest_dir, ".test2.txt")
-# touch_remote(host, "/mnt/data/rejd/tst/test.txt")
-# download_file(host, "/mnt/data/rejd/tst/test.txt")
-# download_file(host, "/mnt/data/rejd/tst/test.txt", dest=dest_dir)
-# download_file(host, "/mnt/data/rejd/tst/test.txt", dest=dest_file)
+################ test copy_remote_file ########################################
+# touch_remote(host,"/mnt/data/rejd/test/blahb.cle")
+# copy_remote_file(host,"/mnt/data/rejd/test/blahb","/mnt/data/rejd/testt/" )
+# copy_remote_file(host,"/mnt/data/rejd/test/blahb.cle","/mnt/data/rejd/testt" )
+# copy_remote_file(host,"/mnt/data/rejd/test/blahb.cle","/mnt/data/rejd/testt/" )
+# copy_remote_file(host,"/mnt/data/rejd/test/blahb.cle","/mnt/data/rejd/testt/tst" )
+# copy_remote_file(host,"/mnt/data/rejd/test/blahb.cle","/mnt/data/rejd/testt/tst/" )
+# copy_remote_file(host,"/mnt/data/rejd/test/blahb.cle","/mnt/data/rejd/testt/tst.txt" )
 
-# dest_dir = os.path.join(os.getcwd(), ".tst")
-# os.makedirs(dest_dir, exist_ok=True)
-# download_dir(host,"/mnt/data/rejd/tst")
-# download_dir(host,"/mnt/data/rejd/tst",dest_dir)
 
-# delete_remote_file(host, "/mnt/data/rejd/tst.tar")
+################ test download_file ###########################################
+# download_file(host,"/mnt/data/rejd/tst/blah")
+# download_file(host,"/mnt/data/rejd/tst/blah.txt")
+# download_file(host,"/mnt/data/rejd/tst/blah.txt", "dl_tst/")
+# download_file(host,"/mnt/data/rejd/tst/blah.txt","dl_tst")
+# download_file(host,"/mnt/data/rejd/tst/blah.txt", "dl_tst", overwrite=False)
+# download_file(host,"/mnt/data/rejd/tst/blah.txt", "dl_tst/loool.log" )
+# download_file(host,"/mnt/data/rejd/tst/blah.txt", "dl_tst/trada/loool.log" )
+# download_file(host,"/mnt/data/rejd/tst/blah.txt", "dl_tst/trada/" )
+# download_file(host,"/mnt/data/rejd/tst/blah.txt", "dl_tst/trada" )
 
-#print(zip_remote_dir(host, "/mnt/data/rejd/tst"))
+################ test download_dir ############################################
 
-# zip_and_download(host,"/mnt/data/rejd/tst")
+# download_dir(host, "/mnt/data/rejd/tst")
+# download_dir(host, "/mnt/data/rejd/tst/")
+# download_dir(host, "/mnt/data/rejd/tst/blah.txt")
 
-# print(read_remote_json(host,"/mnt/data/log_config.json"))
-# print(read_remote_json(host,"/mnt/data/log_config.disabled"))
+# download_dir(host,"/mnt/data/rejd/tst/", "dl_dir_tst")
+# download_dir(host,"/mnt/data/rejd/tst/", "dl_dir_tst/propr")
+# download_dir(host,"/mnt/data/rejd/tst/", "dl_dir_tst/propr/")
+# download_dir(host,"/mnt/data/rejd/tst/", "test")
+# download_dir(host,"/mnt/data/rejd/tst/", "test/")
+
+# download_dir(host,"/mnt/data/rejd/tst/", "dl_dir_tst/")
+
+################ test zip_remote_dir ##########################################
+
+# zip_remote_dir(host, "/mnt/data/rejd/tst")
+# zip_remote_dir(host, "/mnt/data/rejd/tst/")
+# zip_remote_dir(host, "/mnt/data/rejd/.bashrc-ts20")
+# zip_remote_dir(host, "/mnt/data/rejd/test")
+# zip_remote_dir(host, "/mnt/data/rejd/test/")
+# zip_remote_dir(host, "/mnt/data/rejd/test/looool")
