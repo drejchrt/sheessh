@@ -620,7 +620,7 @@ def delete_remote_dir_content(host:Host, path):
     :param path: path to directory to be deleted
     :return:
     """
-    if remote_file_exists(host, path):
+    if remote_dir_exists(host, path):
         host.run(f"rm -rf {path}/*")
     else:
         raise FileNotFoundError(f"Error deleting remote directory content."
